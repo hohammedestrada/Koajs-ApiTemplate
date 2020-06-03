@@ -28,6 +28,39 @@ module.exports = class PersonController {
 
   /**
    *
+   * @param {object} ctx:
+   * obtendremos las query a traves a traves de ctx.query
+   */
+  async getUsersByQuery(ctx) {
+    const query = ctx.request.query
+    let filter = {}
+    let pagination = {}
+    let flag = true
+
+    for (var keys in query) {
+      if (keys !== 'page' && keys !== 'limit') {
+        filter[keys] = query[keys]
+      } else {
+        pagination[keys] = !isNaN(query[keys]) ? parseInt(query[keys]) : query[keys]
+        if (isNaN(query[keys])) {
+          flag= false
+          break
+        }
+      }
+    }
+
+    if (flag) {
+      const data = await repository.getUsers(filter, pagination)
+      if (data === null || data === undefined) ctx.throw(500, 'Error Internal Server')
+      if (data.statusCode === 404) ctx.throw(404, data.error)
+      ctx.body = data
+    } else {
+      ctx.throw(422, `Valor ${JSON.stringify(pagination)} not supported`)
+    }
+  }
+
+  /**
+   *
    * @param {object} ctx: contexto de koa que contiene los parameteros de la solicitud, en este caso desde el body,
    * obtendremos las propiedades de la persona a guardar a traves de ctx.request.body
    */

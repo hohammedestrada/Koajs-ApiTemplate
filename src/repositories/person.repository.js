@@ -12,6 +12,15 @@ module.exports = class PersonRepository {
     return await PersonModel.findOne(filter)
   }
 
+  async getUsers(filter, pagination) {
+    try {
+      const users = await PersonModel.paginate(filter, pagination)
+      return { statusCode: 200, users: users }
+    } catch (error) {
+      return { statusCode: 404, error: error }
+    }
+  }
+
   /**
    *
    * @param {object} person: contiene las propiedades del documento que se desea guardar,

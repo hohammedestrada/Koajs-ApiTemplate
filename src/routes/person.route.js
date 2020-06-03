@@ -10,9 +10,11 @@ const PersonController = require('../controllers/person.controller')
 const router = new KoaRouter({ prefix: '/person' })
 const controller = new PersonController()
 
+// GET list
+router.get('person/getUsers', '/search/', controller.getUsersByQuery)
+
 // GET /person/29
 router.get('person/byIndex', '/:index', controller.getByIndex)
-
 // POST
 router.post('person/post', '/', controller.save)
 

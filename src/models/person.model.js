@@ -3,6 +3,8 @@
  * Nos permite gestionar los datos de la colección people de MongoDB
  */
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate')
+
 const schema = new mongoose.Schema(
   {
     index: {
@@ -50,6 +52,6 @@ const schema = new mongoose.Schema(
     collection: 'people',
   },
 )
-
+schema.plugin(mongoosePaginate)
 const PersonModel = mongoose.model('PersonModel', schema)
 module.exports = PersonModel
